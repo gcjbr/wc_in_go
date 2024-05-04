@@ -19,10 +19,10 @@ func main() {
 	var responses [4]int
 
 	countLines := flag.Bool("l", false, "Count lines")
-	// countWords := flag.Bool("w", false, "Count words")
+	countWords := flag.Bool("w", false, "Count words")
 	countBytes := flag.Bool("c", false, "Count bytes")
-
 	countChars := flag.Bool("m", false, "Count characters")
+
 	flag.Parse() // Parse the flags
 
 	// Check if args were passed
@@ -56,6 +56,17 @@ func main() {
 		responses[0] = lines
 	}
 
+	if countWords != nil && *countWords {
+		words, err := wordsCount(file)
+
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(0)
+		}
+		println(words)
+		responses[1] = words
+	}
+
 	if countBytes != nil && *countBytes {
 		characters, err := countCharBytes(file)
 
@@ -81,11 +92,27 @@ func main() {
 
 }
 
+func wordsCount(file *os.File) (int, error) {
+	wordCount := 0
+
+	scanner := bufio.NewScanner(file)
+	scanner.Split(bufio.ScanWords)
+
+	for scanner.Scan() {
+		wordCount++
+	}
+
+	if err := scanner.Err(); err != nil {
+		return 0, err
+	}
+
+	return wordCount, nil
+}
+
 func countCharacters(file *os.File) (int, error) {
 	charCount := 0
 
 	reader := bufio.NewReader(file)
-	var er error
 
 	for {
 		_, _, err := reader.ReadRune()
@@ -94,14 +121,14 @@ func countCharacters(file *os.File) (int, error) {
 				break
 			} else {
 
-				er = err
+				return 0, err
 			}
 
 		}
 		charCount++
 	}
 
-	return charCount, er
+	return charCount, nil
 }
 
 func countLinesFromFile(file *os.File) (int, error) {
