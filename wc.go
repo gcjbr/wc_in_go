@@ -8,6 +8,21 @@ import (
 )
 
 func main() {
+
+	// Check if args has any flags
+
+	if len(os.Args) < 3 {
+		printUsage()
+	}
+
+	var responses [4]int
+
+	//countLines := flag.Bool("l", false, "Count lines")
+	// countWords := flag.Bool("w", false, "Count words")
+	countBytes := flag.Bool("c", false, "Count bytes")
+	// countChars := flag.Bool("m", false, "Count characters")
+	flag.Parse() // Parse the flags
+
 	// Check if args were passed
 	if len(os.Args) < 2 {
 		fmt.Println("You must specify a file after the command")
@@ -26,13 +41,7 @@ func main() {
 	// Ensure the file is closed after the function returns
 	defer file.Close()
 
-	// Parse flags
-	c := flag.Bool("c", false, "Count characters in the file")
-
-	flag.Parse()
-
-	if c != nil && *c {
-
+	if countBytes != nil && *countBytes {
 		characters, err := countCharacters(file)
 
 		if err != nil {
@@ -40,7 +49,7 @@ func main() {
 			os.Exit(0)
 		}
 
-		fmt.Println(characters)
+		responses[2] = characters
 	}
 
 }
@@ -62,4 +71,15 @@ func countCharacters(file *os.File) (int, error) {
 
 	return count, nil
 
+}
+
+func printUsage() {
+	fmt.Println("Usage: [flags] [filename]")
+	fmt.Println("Flags:")
+	fmt.Println("  -c  Count bytes")
+	fmt.Println("  -l  Count lines")
+	fmt.Println("  -m  Count characters")
+	fmt.Println("  -w  Count words")
+
+	os.Exit(0)
 }
