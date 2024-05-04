@@ -74,7 +74,7 @@ func countLinesFromFile(file *os.File) (int, error) {
 	}
 
 	if err := scanner.Err(); err != nil {
-		return 0, err // Handle any errors that occurred during scanning
+		return 0, err
 	}
 
 	return count, nil
