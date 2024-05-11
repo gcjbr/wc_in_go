@@ -9,6 +9,13 @@ import (
 	"strings"
 )
 
+type response struct {
+	lines int
+	words int
+	bytes int
+	chars int
+}
+
 func main() {
 
 	// Check if args has any flags
@@ -19,7 +26,7 @@ func main() {
 
 	expandFlags()
 
-	var responses [4]int
+	var responses response
 
 	countLines := flag.Bool("l", false, "Count lines")
 	countWords := flag.Bool("w", false, "Count words")
@@ -49,54 +56,55 @@ func main() {
 	// Check flags
 
 	if *countLines {
+		println("Counting lines...")
 		lines, err := countLinesFromFile(file)
 
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(0)
 		}
-		println(lines)
-		responses[0] = lines
+
+		responses.lines = lines
 	}
 
 	if *countWords {
+		println("Counting words...")
 		words, err := wordsCount(file)
 
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(0)
 		}
-		println(words)
-		responses[1] = words
+
+		responses.words = words
 	}
 
 	if *countBytes {
-		characters, err := countCharBytes(file)
+		bytes, err := countCharBytes(file)
 
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(0)
 		}
 
-		println(characters)
-		responses[2] = characters
+		responses.bytes = bytes
 	}
 
 	if *countChars {
 		characters, err := countCharacters(file)
-
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(0)
 		}
 
-		responses[3] = characters
+		responses.chars = characters
 	}
 
 }
 
 func wordsCount(file *os.File) (int, error) {
 	wordCount := 0
+	file.Seek(0, 0)
 
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanWords)
@@ -113,28 +121,31 @@ func wordsCount(file *os.File) (int, error) {
 }
 
 func countCharacters(file *os.File) (int, error) {
+	file.Seek(0, 0)
 	charCount := 0
 
 	reader := bufio.NewReader(file)
 
 	for {
 		_, _, err := reader.ReadRune()
+
+		charCount++
 		if err != nil {
 			if err == io.EOF {
 				break
 			} else {
-
 				return 0, err
 			}
-
 		}
-		charCount++
+
 	}
 
 	return charCount, nil
+
 }
 
 func countLinesFromFile(file *os.File) (int, error) {
+	file.Seek(0, 0)
 	count := 0
 
 	scanner := bufio.NewScanner(file)
@@ -152,7 +163,7 @@ func countLinesFromFile(file *os.File) (int, error) {
 }
 
 func countCharBytes(file *os.File) (int, error) {
-
+	file.Seek(0, 0)
 	count := 0
 
 	scanner := bufio.NewScanner(file)
