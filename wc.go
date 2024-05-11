@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -15,6 +16,8 @@ func main() {
 	if len(os.Args) < 3 {
 		printUsage()
 	}
+
+	expandFlags()
 
 	var responses [4]int
 
@@ -176,4 +179,21 @@ func printUsage() {
 	fmt.Println("  -w  Count words")
 
 	os.Exit(0)
+}
+
+func expandFlags() {
+	originalArgs := os.Args[1:]
+	expandedArgs := []string{}
+
+	for _, arg := range originalArgs {
+		if strings.HasPrefix(arg, "-") && len(arg) > 2 {
+			for _, ch := range arg[1:] {
+				expandedArgs = append(expandedArgs, "-"+string(ch))
+			}
+		} else {
+			expandedArgs = append(expandedArgs, arg)
+		}
+	}
+
+	os.Args = append([]string{os.Args[0]}, expandedArgs...)
 }
