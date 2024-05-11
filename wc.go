@@ -111,7 +111,36 @@ func main() {
 		responses.chars = characters
 	}
 
-	//printResponses(responses, flags)
+	printResponses(responses, flags, filePath)
+
+}
+
+func printResponses(responses response, flags flags, filePath string) {
+	if flags.countLines {
+		fmt.Println("Lines:", responses.lines)
+	}
+
+	if flags.countWords {
+		fmt.Println("Words:", responses.words)
+	}
+
+	if flags.countBytes {
+		fmt.Println("Bytes:", responses.bytes)
+	}
+
+	if flags.countChars {
+		fmt.Println("Characters:", responses.chars)
+	}
+
+	// If no flags are set, print all
+	if !flags.countLines && !flags.countWords && !flags.countBytes && !flags.countChars {
+		fmt.Println("Lines:", responses.lines)
+		fmt.Println("Words:", responses.words)
+		fmt.Println("Bytes:", responses.bytes)
+		fmt.Println("Characters:", responses.chars)
+	}
+
+	fmt.Print("File:", filePath)
 
 }
 
