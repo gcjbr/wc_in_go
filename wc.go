@@ -48,7 +48,7 @@ func main() {
 
 	// Check flags
 
-	if countLines != nil && *countLines {
+	if *countLines {
 		lines, err := countLinesFromFile(file)
 
 		if err != nil {
@@ -59,7 +59,7 @@ func main() {
 		responses[0] = lines
 	}
 
-	if countWords != nil && *countWords {
+	if *countWords {
 		words, err := wordsCount(file)
 
 		if err != nil {
@@ -70,7 +70,7 @@ func main() {
 		responses[1] = words
 	}
 
-	if countBytes != nil && *countBytes {
+	if *countBytes {
 		characters, err := countCharBytes(file)
 
 		if err != nil {
@@ -82,7 +82,7 @@ func main() {
 		responses[2] = characters
 	}
 
-	if countChars != nil && *countChars {
+	if *countChars {
 		characters, err := countCharacters(file)
 
 		if err != nil {
