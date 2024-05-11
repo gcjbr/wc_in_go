@@ -15,13 +15,6 @@ The wc utility displays the number of lines, words, and bytes contained in each 
 
      The following options are available:
 
-     --libxo
-             Generate output via libxo(3) in a selection of different human and machine readable formats.  See xo_parse_args(3) for details on command
-             line arguments.
-
-     -L      Write the length of the line containing the most bytes (default) or characters (when -m is provided) to standard output.  When more than one
-             file argument is specified, the longest input line of all files is reported as the value of the final “total”.
-
      -c      The number of bytes in each input file is written to the standard output.  This will cancel out any prior usage of the -m option.
 
      -l      The number of lines in each input file is written to the standard output.
@@ -33,3 +26,37 @@ The wc utility displays the number of lines, words, and bytes contained in each 
 
 ```
 
+
+## Usage
+
+```bash
+$ go get github.com/gcjbr/wc_in_go
+$ go build
+```
+
+### Add to your PATH
+
+Move the binary to your PATH
+
+```bash
+$ mv wc-go /usr/local/bin
+```
+
+
+
+
+## Example
+
+```bash
+$ wc-go -l
+$ wc-go -w
+$ wc-go -m
+$ wc-go -c
+$ wc-go -cwl # It accepts multiple options combined
+$ wc-go       # It will default to -lwmc
+
+```
+
+## License
+
+MIT

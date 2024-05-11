@@ -26,8 +26,7 @@ type flags struct {
 func main() {
 
 	// Check if args has any flags
-
-	if len(os.Args) < 3 {
+	if len(os.Args) < 2 {
 		printUsage()
 	}
 
@@ -67,6 +66,14 @@ func main() {
 	defer file.Close()
 
 	// Check flags
+
+	// If no flags are set, print all
+	if !flags.countLines && !flags.countWords && !flags.countBytes && !flags.countChars {
+		flags.countLines = true
+		flags.countWords = true
+		flags.countBytes = true
+		flags.countChars = true
+	}
 
 	if flags.countLines {
 		lines, err := countLinesFromFile(file)
@@ -116,6 +123,7 @@ func main() {
 }
 
 func printResponses(responses response, flags flags, filePath string) {
+
 	if flags.countLines {
 		fmt.Println("Lines:", responses.lines)
 	}
@@ -129,14 +137,6 @@ func printResponses(responses response, flags flags, filePath string) {
 	}
 
 	if flags.countChars {
-		fmt.Println("Characters:", responses.chars)
-	}
-
-	// If no flags are set, print all
-	if !flags.countLines && !flags.countWords && !flags.countBytes && !flags.countChars {
-		fmt.Println("Lines:", responses.lines)
-		fmt.Println("Words:", responses.words)
-		fmt.Println("Bytes:", responses.bytes)
 		fmt.Println("Characters:", responses.chars)
 	}
 
