@@ -16,6 +16,13 @@ type response struct {
 	chars int
 }
 
+type flags struct {
+	countLines bool
+	countWords bool
+	countBytes bool
+	countChars bool
+}
+
 func main() {
 
 	// Check if args has any flags
@@ -27,6 +34,7 @@ func main() {
 	expandFlags()
 
 	var responses response
+	var flags flags
 
 	countLines := flag.Bool("l", false, "Count lines")
 	countWords := flag.Bool("w", false, "Count words")
@@ -34,6 +42,11 @@ func main() {
 	countChars := flag.Bool("m", false, "Count characters")
 
 	flag.Parse() // Parse the flags
+
+	flags.countLines = *countLines
+	flags.countWords = *countWords
+	flags.countBytes = *countBytes
+	flags.countChars = *countChars
 
 	// Check if args were passed
 	if len(os.Args) < 2 {
@@ -55,8 +68,7 @@ func main() {
 
 	// Check flags
 
-	if *countLines {
-		println("Counting lines...")
+	if flags.countLines {
 		lines, err := countLinesFromFile(file)
 
 		if err != nil {
@@ -67,8 +79,7 @@ func main() {
 		responses.lines = lines
 	}
 
-	if *countWords {
-		println("Counting words...")
+	if flags.countWords {
 		words, err := wordsCount(file)
 
 		if err != nil {
@@ -79,7 +90,7 @@ func main() {
 		responses.words = words
 	}
 
-	if *countBytes {
+	if flags.countBytes {
 		bytes, err := countCharBytes(file)
 
 		if err != nil {
@@ -90,7 +101,7 @@ func main() {
 		responses.bytes = bytes
 	}
 
-	if *countChars {
+	if flags.countChars {
 		characters, err := countCharacters(file)
 		if err != nil {
 			fmt.Println(err)
@@ -99,6 +110,8 @@ func main() {
 
 		responses.chars = characters
 	}
+
+	//printResponses(responses, flags)
 
 }
 
